@@ -200,7 +200,7 @@
 
 <div id="wheel-wrap">
   <svg id="pointer" width="24" height="28" viewBox="0 0 24 28">
-    <polygon points="12,2 22,26 12,20 2,26" fill="#fff" opacity="0.9"/>
+    <polygon points="12,26 22,2 12,8 2,2" fill="#fff" opacity="0.9"/>
   </svg>
   <canvas id="canvas" width="300" height="300"></canvas>
 </div>
@@ -357,16 +357,19 @@
   function showResult(a) {
     const arc = Math.PI * 2 / SECTORS;
     const norm = ((a % (Math.PI*2)) + Math.PI*2) % (Math.PI*2);
-    const rel  = ((Math.PI*1.5 - norm) % (Math.PI*2) + Math.PI*2) % (Math.PI*2);
-    const isRosso = Math.floor(rel / arc) % 2 === 0;
+    const pointerAngle = Math.PI * 1.5;
+    const rel = ((pointerAngle - norm) % (Math.PI*2) + Math.PI*2) % (Math.PI*2);
+    const sectorHit = Math.floor(rel / arc) % SECTORS;
+    const isRosso = sectorHit % 2 !== 0;
 
     const box = document.getElementById('result-box');
     box.className = 'result-box ' + (isRosso ? 'rosso' : 'nero');
     box.style.display = 'block';
     document.getElementById('result-tag').textContent = isRosso ? 'Carta Ripasso' : 'Carta Rischio / Opportunità';
     document.getElementById('result-title').textContent = isRosso
-      ? 'Di quale personaggio vuoi ripassare?'
+      ? 'Quale contenuto vuoi ripassare?'
       : 'Quale sfida vuoi affrontare?';
+
 
     const grid = document.getElementById('cards-grid');
     grid.innerHTML = '';
