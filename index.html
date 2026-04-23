@@ -355,12 +355,10 @@
   }
 
   function showResult(a) {
-    const arc = Math.PI * 2 / SECTORS;
-    const norm = ((a % (Math.PI*2)) + Math.PI*2) % (Math.PI*2);
-    const pointerAngle = Math.PI * 1.5;
-    const rel = ((pointerAngle - norm) % (Math.PI*2) + Math.PI*2) % (Math.PI*2);
-    const sectorHit = Math.floor(rel / arc) % SECTORS;
-    const isRosso = sectorHit % 2 !== 0;
+    const pointerX = cx;
+    const pointerY = 10;
+    const pixel = ctx.getImageData(pointerX, pointerY, 1, 1).data;
+    const isRosso = pixel[0] > 80;
 
     const box = document.getElementById('result-box');
     box.className = 'result-box ' + (isRosso ? 'rosso' : 'nero');
@@ -368,17 +366,16 @@
     document.getElementById('result-tag').textContent = isRosso ? 'Carta Ripasso' : 'Carta Rischio / Opportunità';
     document.getElementById('result-title').textContent = isRosso
       ? 'Quale contenuto vuoi ripassare?'
-      : 'Quale sfida vuoi affrontare?';
-
+      : 'Svela il rischio o l\'opportunità che ti attende';
 
     const grid = document.getElementById('cards-grid');
     grid.innerHTML = '';
     carte.forEach(c => {
-      const a = document.createElement('a');
-      a.className = 'card-link';
-      a.href = isRosso ? c.rosso : c.nero;
-      a.innerHTML = c.nome + '<small>' + (isRosso ? 'carta rossa →' : 'carta nera →') + '</small>';
-      grid.appendChild(a);
+      const el = document.createElement('a');
+      el.className = 'card-link';
+      el.href = isRosso ? c.rosso : c.nero;
+      el.innerHTML = c.nome + '<small>' + (isRosso ? 'carta rossa →' : 'carta nera →') + '</small>';
+      grid.appendChild(el);
     });
 
     document.getElementById('spin-btn').disabled = false;
